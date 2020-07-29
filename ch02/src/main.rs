@@ -1,5 +1,3 @@
-// Ahora que tenemos una base, es necesario generar un número aleatorio.
-// Para eso, primero debemos modificar el archivo Cargo.toml
 use std::io;
 
 fn main() {
