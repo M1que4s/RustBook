@@ -7,3 +7,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+rand = "0.5.5"
+# Para generar un número aleatorio, necesitaremos el 'crate' rand, ofrecido por el mismo
+# equipo de Rust. Un 'crate' es básicamente una librería escrita en Rust que nos brinda
+# funcionalidad adicional :P
+# Como ya se dijo antes, cargo es el encargado de administrar paquetes (crates) en Rust y
+# lo que estamos haciendo aquí es básicamente decirle a Cargo que necesitamos el crate rand
+# en este proyecto, así que al colocarlo aquí, la próxima vez que compilemos el proyecto,
+# cargo se encargará de proveernos la dependencia descargándola y compilandola desde crates.io
