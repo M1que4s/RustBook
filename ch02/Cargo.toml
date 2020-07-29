@@ -6,3 +6,9 @@ edition = "2018"
 
 [dependencies]
 rand = "0.5.5"
+# Debido a como funciona cargo, las dependencias nunca se actualizaran a menos que lo hagamos
+# manualmente gracias a Cargo.lock
+# Es por eso, que podemos usar cargo update para saber que nuevas versiones hay disponibles
+# que conincidan con nuestras necesidades (gracias a SemVer), si funciona, entonces se
+# escribirá automáticamente en este archivo. Más adelante en el capítulo 14 se hablará sobre
+# Cargo y todo lo relacionado a este.
