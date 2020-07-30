@@ -1,10 +1,5 @@
-// Comparando la entrada del usuario con el número secreto.
-// NOTA: Este código no compilará.
 use rand::Rng;
 use std::cmp::Ordering;
-// Ordering es otro enum al igual que Result, pero posee 3 variantes (las cuales se pueden
-// ver más abajo en el bloque 'match'). Forma parte de la librería estándar (en std::cmp)
-// y se usa principalmente para comparar "cosas".
 use std::io;
 
 fn main() {
@@ -19,22 +14,24 @@ fn main() {
     .read_line(&mut guess)
     .expect("Failed to read line...");
 
+  let guess: u32 = guess.trim().parse().expect("Invalid input!");
+  // Con esto, convertimos la entrada del usuario (que por defecto es tipo String) a un
+  // valor númerico válido que pueda ser comparado. Ńótese el 'u32' luego de 'guess', esto
+  // es una notación de tipo. Al igual que otros lenguajes, Rust es un lenguaje tipado, por
+  // lo que con esto nos estamos asegurando de guardar un valor numérico de 32 bits sin signo
+  // (ya que el número secreto es entre 1 y 100). Adicional a eso, esto también le indica a la
+  // función 'parse' que necesitamos convertir la entrada este tipo de dato, de no hacer esto,
+  // tendríamos que escribir la línea anterior de la siguiente manera:
+  //    let guess = guess.trim().parse::<u32>().expect("Invalid input!");
+  // El uso del método 'trim' es para eliminar el carácter "\n" que es ingresado cuando el
+  // usuario presiona enter para enviar su entrada. Finalmente, debido a que parse puede
+  // generar errores (ya que si la entrada del usuario es algo como "A%·→", eso no se puede
+  // convertir a un número claramente), se usa expect para evitar que el programa se rompa de
+  // forma "extraña". Con esto, el proyecto ahora si compila correctamente.
+
   println!("You guessed: {}", guess);
 
-  // El método 'cmp' compara 2 dos valores y retorna una variante de Ordering. Se puede usar
-  // en cualquier cosa que sea comparable (aunque desde mi punto de vista creo que aplica
-  // principalmente con números).
   match guess.cmp(&num) {
-    // Según puedo ver, una expresión 'match' sería básicamente como 'switch' en C, pero
-    // difiere en 2 cosas (basándome en lo que se ha hablado hasta ahora):
-    //    1: en C, el keyword 'switch' (hasta donde sé), solo trabaja con números, cosa que
-    //       no parece ser el caso en Rust.
-    //    2: no hay keywords adicionales como 'case' dentro de match, en lugar de eso, se usa
-    //       algo similar a "functions arrows"/"lambdas" (JS y otros) en donde lo que vendría
-    //       siendo el argumento, match lo usa como el valor a coincidir (ya que según el
-    //       libro, match trabaja con patrones) y en caso de que lo haga, ejecuta el código
-    //       que sigue a "=>".
-    // Dicho eso, lo que hará el código de abajo es bastante obvio.
     Ordering::Less => println!("Too small!"),
     Ordering::Greater => println!("Too big!"),
     Ordering::Equal => println!("You win!"),
