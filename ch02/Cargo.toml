@@ -1,7 +1,3 @@
-# Otra funcionalidad genial de Cargo es la posibilidad de leer la documentación
-# de las librerías que usamos en nuestro proyecto localmente con nuestro navegador.
-# Solo hay que ejecutar cargo doc --open
-
 [package]
 name = "ch02"
 version = "0.1.0"
