@@ -2,38 +2,58 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
+// Usando bucles para permitir múltiples entradas. En este punto, el juego está casi listo,
+// solo faltarían unos pequeños detalles.
 fn main() {
   println!("Guess the number!");
-  println!("Please input your guess:");
-  let mut guess = String::new();
-  let num = rand::thread_rng().gen_range(1, 101);
+  let snum = rand::thread_rng().gen_range(1, 101);
 
-  println!("Secret number: {}", num);
+  // El keyword 'loop' genera un bucle infinito. Sin embargo, eso de hecho es un problema
+  // aquí, ya que incluso si el usuario da con la respuesta, el programa seguirá ejecutándose
+  // por siempre. Por parte del usuario, hay 2 opciones posibles:
+  //    1: usar la combinación de teclas Ctrl + C
+  //    2: ingresar una entrada diferente de un número
+  // Sin embargo, en ambos casos es... Innecesario, ya que eso se puede solucionar desde
+  // este mismo código y para eso está el keyword 'break' al final del bloque match (ver
+  // más abajo ↓).
+  loop {
+    let mut guess = String::new();
+    // Si estoy en lo correcto, en el libro no se explica a detalle por qué ésta línea debe
+    // permanecer dentro del bucle, pero básicamente la razón es porque cuando convertimos
+    // la entrada del usuario a un número, literalmente estamos redeclarando esta variable
+    // pero con un tipo diferente y eso generaría un error con io::stdin cuando tenga que
+    // leer nuevamente la entrada del usuario. Otra posible solución sería usar 2 variables
+    // con nombres diferentes, en ese caso, entonces una o ambas podrían estar fuera del
+    // bucles.
+    println!("Please input your guess:");
 
-  io::stdin()
-    .read_line(&mut guess)
-    .expect("Failed to read line...");
+    io::stdin()
+      .read_line(&mut guess)
+      .expect("Failed to read line...");
 
-  let guess: u32 = guess.trim().parse().expect("Invalid input!");
-  // Con esto, convertimos la entrada del usuario (que por defecto es tipo String) a un
-  // valor númerico válido que pueda ser comparado. Ńótese el 'u32' luego de 'guess', esto
-  // es una notación de tipo. Al igual que otros lenguajes, Rust es un lenguaje tipado, por
-  // lo que con esto nos estamos asegurando de guardar un valor numérico de 32 bits sin signo
-  // (ya que el número secreto es entre 1 y 100). Adicional a eso, esto también le indica a la
-  // función 'parse' que necesitamos convertir la entrada este tipo de dato, de no hacer esto,
-  // tendríamos que escribir la línea anterior de la siguiente manera:
-  //    let guess = guess.trim().parse::<u32>().expect("Invalid input!");
-  // El uso del método 'trim' es para eliminar el carácter "\n" que es ingresado cuando el
-  // usuario presiona enter para enviar su entrada. Finalmente, debido a que parse puede
-  // generar errores (ya que si la entrada del usuario es algo como "A%·→", eso no se puede
-  // convertir a un número claramente), se usa expect para evitar que el programa se rompa de
-  // forma "extraña". Con esto, el proyecto ahora si compila correctamente.
+    let guess: u32 = match guess.trim().parse() {
+      Ok(num) => num,
+      Err(_) => {
+        println!("Invalid input, please type a number!");
+        continue;
+      }
+    };
+    // Al usar una expresión match cuando convertimos la entrada del usuario, podemos hacer
+    // que en lugar de finalizar el programa si la entrada es inválida, simplemente lo ignore
+    // vuelva a preguntar al usuario por un valor. El método parse también retorna un tipo
+    // Result, así que aquí se hace algo similar a lo que hicimos con io::stdin(), la única
+    // diferencia es que estamos usando una expresión match.
 
-  println!("You guessed: {}", guess);
+    println!("You guessed: {}", guess);
 
-  match guess.cmp(&num) {
-    Ordering::Less => println!("Too small!"),
-    Ordering::Greater => println!("Too big!"),
-    Ordering::Equal => println!("You win!"),
+    match guess.cmp(&snum) {
+      Ordering::Less => println!("Too small!"),
+      Ordering::Greater => println!("Too big!"),
+      Ordering::Equal => {
+        println!("You win!");
+        break;
+        // Si el usuario adivina el número, entonces break hará que el bucle termine
+      }
+    }
   }
 }
