@@ -1,5 +1,5 @@
 [package]
-name = "ch03"
+name = "ch03-01-variables"
 version = "0.1.0"
 authors = ["Miqueas Martinez <miqueas2020@yahoo.com>"]
 edition = "2018"
